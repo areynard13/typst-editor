@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    font-family: Arial, sans-serif;
+    background-color: #eff0f3;
+}
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.editor-container {
+    width: 50%;
+    height: 100%;
+}
+.editor {
+    height: 95%;
+    display: flex;
+    border-right: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+}
+
+.line-numbers {
+    width: 40px;
+    padding: 10px;
+    background: #f0f0f0;
+    text-align: right;
+    user-select: none;
+    font-family: monospace;
+    line-height: 1.2em;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    color: grey;
+    overflow: hidden;
+    height: 100%;
+}
+
+textarea {
+    flex: 1;
+    height: 100%;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 16px;
+    resize: none;
+    border: none;
+    outline: none;
+    background-color: #fbfbfb;
+    line-height: 19.2px;
+}
+.preview {
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: start;
+}
+
+.btnExport {
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    margin: 5px;
+    background-color: rgb(66, 145, 236);
+    color: white;
+}
+.btnNavBar {
+    padding: 5px;
+    font-size: 15px;
+    margin: 2px;
+    width: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.btnNavBarCategory {
+    display: flex;
+}
+.pageBtnContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 5%;
+}
+.btnZoom {
+    border-radius: 25%;
+    padding: 5px;
+    border: 1px solid;
+}
+
+#page {
+    transition: transform 0.2s ease;
+    background-color: #fff;
+}
+nav {
+    height: 5%;
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+    gap: 15px;
+}
+button {
+    cursor: pointer;
+}
+.iconOpen {
+    fill: black !important;
+}
+.image-explorer {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.image-explorer ul {
+    list-style: none;
+    padding-left: 0;
+    font-family: monospace;
+    margin-top: 10px;
+}
+
+.image-explorer li {
+    padding: 5px 0;
+    cursor: default;
+}
+#btnUploadImages, #btnCreateFolder {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+#btnUploadImages {
+    background-color: rgb(66, 145, 236);
+}
+#btnCreateFolder {
+    background-color: rgb(243, 171, 71);
+}
+#rootDropZone {
+    padding: 5px;
+    border: 1px dashed #aaa;
+    margin-bottom: 5px;
+    cursor: pointer;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "typst-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@myriaddreamin/typst-ts-node-compiler": "^0.7.0-rc1",
+    "cors": "^2.8.5",
+    "express": "^5.2.1"
+  }
+}
