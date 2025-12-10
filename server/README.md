@@ -20,8 +20,8 @@
 ## Installation and Setup
 ### Clone the repository
 ```bash
-git clone https://github.com/TODO
-cd typst-api
+git clone https://github.com/areynard13/typst-editor.git
+cd typst-editor/server
 ```
 ### Build and run with Docker
 ```docker
@@ -61,4 +61,4 @@ When rendering images in a Typst document, the API handles them in the following
 This process ensures that images are included in the document without leaving unnecessary files on the server.
 
 ## License
-The current License is Apache version 2.0, you can see it in the LICENSE file.
+The current License is Apache version 2.0, you can see it in the [LICENSE](../LICENSE) file.
