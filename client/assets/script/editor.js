@@ -57,7 +57,7 @@ export async function fetchCompile() {
     const svg = await fetchSvg(textarea.value, { children: fileTree.children });
     if (svg.startsWith("{")) {
         let error = JSON.parse(svg)
-        let errorDetails = error.details.split(": ")[1]
+        let errorDetails = error.details ? error.details.split(": ")[1] : ""
         let message = ""
 
         if (errorDetails.includes("file not found")) {
