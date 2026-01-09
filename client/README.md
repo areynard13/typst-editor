@@ -6,6 +6,7 @@
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation and Setup](#installation-and-setup)
+- [Known Issues](#known-issues)
 - [License](#license)
 
 ## Project Structure
@@ -57,6 +58,11 @@ docker compose up -d --build
 
 ## Configuration
 The API url can be configured in [client/assets/script/api.js](/client/assets/script/api.js)
+
+## Known Issues
+**1. File Manager Sub-Folder Limitation**:  
+The File Manager currently cannot insert files directly into sub-folders. Files or folders must first be created at the project root and then manually moved into the desired sub-directory (e.g. creating lib at root before moving it into src).  
+See Issue [here](https://github.com/areynard13/typst-editor/issues/1)
 
 ## License
 The current License is Apache version 2.0, you can see it in the [LICENSE](../LICENSE) file.
