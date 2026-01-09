@@ -1,4 +1,4 @@
-# Typst online editor
+# Typst Online Editor
 **Typst Online Editor** is an online editor for Typst, offering a variety of features such as images, tables, and more. It is designed to make creating and managing Typst documents simple and efficient.
 
 ## Table of Contents
@@ -36,16 +36,27 @@ Here is the structure of the project:
 
 ## Prerequisites
 - Node.js (optional, only if you want to run a local server)
-- Live Server or any other local server
+- Live Server or any other local server (if run in without docker)
 
 ## Installation and Setup
 - Clone the repository:
 ```bash
 git clone https://github.com/areynard13/typst-editor.git
 ```
+### Start with docker
+- Verify that you are at the project root.
+- Start with docker
+```docker
+docker compose up -d --build
+```
+### Local Development
 - Open the project in VS Code or your preferred editor (client).
 - Start a local server (e.g., Live Server).
 - Open http://127.0.0.1:5500 in your browser to start using the editor.
+> Then you need to start the server (API)
+
+## Configuration
+The API url can be configured in [client/assets/script/api.js](/client/assets/script/api.js)
 
 ## License
 The current License is Apache version 2.0, you can see it in the [LICENSE](../LICENSE) file.

@@ -1,0 +1,24 @@
+services:
+  server:
+    build: ./server
+    container_name: typst-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+    networks:
+      - typst-network
+  
+  client:
+    image: nginx:alpine
+    container_name: typst-client
+    ports:
+      - "8080:80"
+    volumes:
+      - ./client:/usr/share/nginx/html:ro
+    networks:
+      - typst-network
+    
+networks:
+  typst-network:
+    driver: bridge

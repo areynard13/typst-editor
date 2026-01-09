@@ -42,6 +42,10 @@ Refer to the corresponding README:
 - `client/README.md`
 - `server/README.md`
 
+The entire stack can be deployed using Docker Compose.
+```docker
+docker compose up -d --build
+```
 ## Repository structure
 ```bash
 .

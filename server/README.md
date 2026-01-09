@@ -5,10 +5,10 @@
 - [Features](#features)
 - [Installation and Setup](#installation-and-setup)
     - [Clone the repository](#clone-the-repository)
-    - [Build ans run with Docker](#build-and-run-with-docker)
+    - [Start with docker](#start-with-docker)
 - [Usage](#usage)
     - [Payload example](#payload-example)
-- [Images feature](#images-feature)
+- [Images Processing Workflow](#images-processing-workflow)
 - [License](#license)
 
 ## Features
@@ -21,14 +21,15 @@
 ### Clone the repository
 ```bash
 git clone https://github.com/areynard13/typst-editor.git
-cd typst-editor/server
+cd typst-editor
 ```
-### Build and run with Docker
+### Start with docker
+- Go back to the racine.
+- Start with docker
 ```docker
-docker build -t typst-api:1 .  # Build the Docker image
-docker run -p 3000:3000 -d typst-api:1  # Run the container
+docker compose up -d --build
 ```
-Once running, the API will be accessible at http://localhost:3000.
+Once running, the API will be accessible at http://localhost:3000 and the client at http://127.0.0.1:8080.
 
 ## Usage
 You can send requests to the API to compile Typst documents. Here's the endpoints:
@@ -50,7 +51,7 @@ You can send requests to the API to compile Typst documents. Here's the endpoint
 `source` → The Typst document content as a string.  
 `imgPaths` → Optional object mapping image paths to Base64-encoded images.
 
-## Images feature
+## Images Processing Workflow
 When rendering images in a Typst document, the API handles them in the following way:
 
 1. **Receive Base64 Image** – The image is sent as a Base64-encoded string in the imgPaths payload.
