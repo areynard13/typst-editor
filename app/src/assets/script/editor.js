@@ -8,7 +8,8 @@ export let currentFolderPath = "root";
 const textarea = document.getElementById('editor');
 const lineNumbers = document.getElementById('lineNumbers');
 const page = document.getElementById("page");
-
+export let currentProjectId;
+autoSave()
 export const uploadedImages = {};
 
 // ---------- Formatting functions ----------
@@ -34,6 +35,7 @@ export function applyFormatting(type) {
     textarea.focus();
 
     fetchCompile();
+    autoSave();
 }
 
 // ---------- Line numbers ----------
@@ -99,7 +101,10 @@ export function downloadDocument() {
 }
 
 // ---------- Event listeners ----------
-export function initEditorListeners(btnBold, btnItalic, btnUnderline, btnSave, btnOpen, fileInput, btnExportPdf, btnExportSvg) {
+export function initEditorListeners(projectId, fileTreeLoad, contentLoad, btnBold, btnItalic, btnUnderline, btnSave, btnOpen, fileInput, btnExportPdf, btnExportSvg) {
+    currentProjectId = projectId
+    fileTree=fileTreeLoad
+    textarea.value=contentLoad
     textarea.addEventListener('input', () => { updateLineNumbers(); debounceFetchCompile(); });
     textarea.addEventListener('keydown', (e) => {
         if (e.key === 'Tab') {
@@ -124,7 +129,10 @@ export function initEditorListeners(btnBold, btnItalic, btnUnderline, btnSave, b
     btnExportSvg.addEventListener('click', async () => exportSvg(await fetchSvg(textarea.value, { children: fileTree.children })));
 }
 
-const debounceFetchCompile = debounce(fetchCompile);
+const debounceFetchCompile = debounce(async () => {
+    await fetchCompile();
+    await autoSave();
+});
 
 // Open a local file
 function openAndShowFile() {
@@ -167,3 +175,24 @@ document.addEventListener('mouseup', () => {
     isDragging = false;
     document.body.style.cursor = 'default';
 });
+
+async function autoSave() {
+    if (!currentProjectId) return;
+
+    const content = textarea.value;
+    const currentFileTree = fileTree;
+
+    try {
+        await fetch('/api/projects/save', {
+            method: 'POST',
+            body: JSON.stringify({
+                id: currentProjectId,
+                content: content,
+                fileTree: currentFileTree
+            })
+        });
+        console.log("Projet sauvegardé...");
+    } catch (err) {
+        console.error("Erreur sauvegarde:", err);
+    }
+}

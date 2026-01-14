@@ -5,7 +5,8 @@ const API_URL = "http://127.0.0.1:3000";
 // Collect images from file tree recursively
 function collectImages(folder) {
     let result = {};
-    Object.values(folder.children).forEach(item => {
+    const children = folder && folder.children ? folder.children : {};
+    Object.values(children).forEach(item => {
         if (item.type === "file") {
             if (item.fullPath.includes("root")) {
                 item.fullPath = item.fullPath.replace("root/", "");

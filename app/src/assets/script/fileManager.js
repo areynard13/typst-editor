@@ -1,4 +1,4 @@
-import { fetchCompile, fileTree } from './editor.js';
+import { fetchCompile, fileTree, currentProjectId } from './editor.js';
 
 const imageList = document.getElementById('imageList');
 const imageExplorer = document.getElementById("imageExplorer");
@@ -81,7 +81,7 @@ function renderTreeRecursive(folder, container, path) {
     });
 }
 
-function moveItem(sourcePath, destFolderPath, fileTree) {
+async function moveItem(sourcePath, destFolderPath, fileTree) {
     if (destFolderPath.startsWith(sourcePath)) return;
 
     const srcParts = sourcePath.split("/").filter(x=>x);
@@ -100,7 +100,7 @@ function moveItem(sourcePath, destFolderPath, fileTree) {
     updatePaths(item, destFolderPath);
     destFolder.children[name] = item;
 
-    saveFileTree();
+    await saveFileTree();
     renderFileExplorer(fileTree);
     fetchCompile();
 }
@@ -121,7 +121,7 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
         document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
         selectedFolderPath = "root";
     });
-    btnCreateFolder.addEventListener("click", () => {
+    btnCreateFolder.addEventListener("click", async () => {
         const folderName = prompt(`Create new folder in ${selectedFolderPath}:`);
         if (!folderName) return;
 
@@ -130,7 +130,7 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
             if (!targetFolder.children[folderName]) {
                 targetFolder.children[folderName] = { type: "folder", name: folderName, children: {} };
                 renderFileExplorer(fileTree);
-                saveFileTree();
+                await saveFileTree();
                 selectedFolderPath="root"
             }
         }
@@ -150,14 +150,14 @@ export function initFileManager(btnShowImages, btnCreateFolder, btnUploadImages,
 
         files.forEach(file => {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 targetFolder.children[file.name] = {
                     type: "file",
                     name: file.name,
                     fullPath: selectedFolderPath === "root" ? file.name : `${selectedFolderPath}/${file.name}`,
                     data: e.target.result
                 };
-                saveFileTree();
+                await saveFileTree();
                 renderFileExplorer(fileTree);
                 fetchCompile();
             };
@@ -195,7 +195,7 @@ export function loadFileTree() {
     }
 }
 
-function deleteItem(path, fileTree) {
+async function deleteItem(path, fileTree) {
     document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
     const parts = path.split("/").filter(x=>x);
     const name = parts[parts.length-1];
@@ -205,17 +205,28 @@ function deleteItem(path, fileTree) {
     if (!parent) return;
 
     delete parent.children[name];
-    saveFileTree();
+    await saveFileTree();
     renderFileExplorer(fileTree);
     fetchCompile();
     selectedFolderPath = "root";
 }
 
-function saveFileTree() {
+async function saveFileTree() {
+    if (!currentProjectId) return;
+
+    const currentFileTree = fileTree;
+
     try {
-        localStorage.setItem('fileTree', JSON.stringify(fileTree));
-    } catch (e) {
-        console.error("Too much image, only the first ones were saved in localStorage.");
+        await fetch('/api/projects/save', {
+            method: 'POST',
+            body: JSON.stringify({
+                id: currentProjectId,
+                fileTree: currentFileTree
+            })
+        });
+        console.log("Projet sauvegardé...");
+    } catch (err) {
+        console.error("Erreur sauvegarde:", err);
     }
 }
 

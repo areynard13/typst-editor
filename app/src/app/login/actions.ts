@@ -9,7 +9,7 @@ export async function loginAction(prevState: ActionResponse, formData: FormData)
   try {
     await signIn("credentials", { 
       ...Object.fromEntries(formData), 
-      redirectTo: "/" 
+      redirectTo: "/dashboard" 
     })
   } catch (error) {
     if (error instanceof Error && error.message?.includes("NEXT_REDIRECT")) {
