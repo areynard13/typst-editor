@@ -1,15 +1,25 @@
 "use server"
 
 import { signIn } from "@/lib/auth"
+import { AuthError } from "next-auth"
 
-export async function loginAction(formData: FormData) {
+type ActionResponse = string | null | undefined;
+
+export async function loginAction(prevState: ActionResponse, formData: FormData) {
   try {
-    await signIn("credentials", formData)
+    await signIn("credentials", { 
+      ...Object.fromEntries(formData), 
+      redirectTo: "/" 
+    })
   } catch (error) {
-    if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
-        throw error;
+    if (error instanceof Error && error.message?.includes("NEXT_REDIRECT")) {
+      throw error
     }
-    console.error("Login error:", error);
-    throw error;
+
+    if (error instanceof AuthError) {
+      return "Identifiants incorrects."
+    }
+    
+    return "Une erreur inattendue est survenue."
   }
 }
