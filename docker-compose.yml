@@ -39,6 +39,8 @@ services:
       - ./app:/app
     networks:
       - typst-network
+    environment:
+      - DATABASE_URL=postgresql://typst_user:qaywsxedc@db:5432/typst_db
     command: sh -c "npx auth secret && npx prisma generate && npx prisma migrate deploy && bun dev"
 
 networks:

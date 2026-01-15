@@ -20,7 +20,7 @@
 ## Installation and Setup
 ### Clone the repository
 ```bash
-git clone https://github.com/areynard13/typst-editor.git
+git clone https://github.com/ISC-HEI/typst-editor.git
 cd typst-editor
 ```
 ### Start Only The API

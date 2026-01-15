@@ -52,7 +52,7 @@ src/
 ## Installation and Setup
 - Clone the repository:
 ```bash
-git clone https://github.com/areynard13/typst-editor.git
+git clone https://github.com/ISC-HEI/typst-editor.git
 ```
 ### Start with docker
 - Verify that you are at the project root.
@@ -64,6 +64,10 @@ docker compose up -d --build
 - Open this repo (app)
 - Create a db in postgres
 - Enter the DATABASE_URL in the .env
+    Here's an example
+    ```dotenv
+    DATABASE_URL="postgresql://user:password@db:5432/typst_db"
+    ```
 - Install dependencies and generate prisma
 ```bash
 bun install

@@ -34,7 +34,7 @@ This monorepo is split into two main components:
 ## Getting started
 Clone the repository
 ```bash
-git clone https://github.com/areynard13/typst-editor.git
+git clone https://github.com/ISC-HEI/typst-editor.git
 ```
 Each component has its own installation and run instructions.
 Refer to the corresponding README:
