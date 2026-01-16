@@ -1,4 +1,5 @@
 import { fetchCompile, fileTree, currentProjectId } from './editor.js';
+import { createElement, FileJson, Book, FileCode, Image, FileQuestion, Folder, Terminal, Notebook } from 'lucide';
 
 const imageList = document.getElementById('imageList');
 const imageExplorer = document.getElementById("imageExplorer");
@@ -28,56 +29,83 @@ export function renderFileExplorer(folder, container = imageList, path="") {
 function renderTreeRecursive(folder, container, path) {
     Object.values(folder.children).forEach(item => {
         const li = document.createElement("li");
+        li.style.listStyle = "none";
+        
+        li.draggable = true;
+
+        const itemRow = document.createElement("div");
+        itemRow.style.display = "flex";
+        itemRow.style.alignItems = "center";
+        itemRow.style.gap = "8px";
+        itemRow.style.cursor = "grab";
+        itemRow.classList.add("tree-item-row");
+
+        const fullPath = path ? `${path}/${item.name}` : item.name;
+
+        li.addEventListener('dragstart', e => {
+            e.dataTransfer.setData("path", fullPath);
+            e.stopPropagation();
+            li.style.opacity = "0.5";
+        });
+
+        li.addEventListener('dragend', () => {
+            li.style.opacity = "1";
+        });
+
+        if (item.type === "folder") {
+            const folderIcon = createElement(Folder);
+            folderIcon.setAttribute('width', '18');
+            folderIcon.setAttribute('height', '18');
+
+            itemRow.innerHTML = `${folderIcon.outerHTML} <strong>${item.name}</strong>`;
+            
+            li.addEventListener('dragover', e => {
+                e.preventDefault();
+                itemRow.style.background = "#eef";
+            });
+            li.addEventListener('dragleave', () => {
+                itemRow.style.background = "transparent";
+            });
+            li.addEventListener('drop', e => {
+                e.preventDefault();
+                itemRow.style.background = "transparent";
+                const sourcePath = e.dataTransfer.getData("path");
+                moveItem(sourcePath, fullPath, fileTree);
+            });
+
+            itemRow.addEventListener("click", (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.tree-item-row').forEach(el => el.classList.remove('selected-folder'));
+                itemRow.classList.add('selected-folder');
+                selectedFolderPath = fullPath;
+            });
+
+            li.appendChild(itemRow);
+
+            const ul = document.createElement("ul");
+            ul.style.marginLeft = "20px";
+            li.appendChild(ul);
+            renderTreeRecursive(item, ul, fullPath);
+
+        } else {
+            const iconHTML = getIcon(item.name);
+            itemRow.innerHTML = `${iconHTML} <span>${item.name}</span>`;
+            li.appendChild(itemRow);
+        }
+
         const btnDelete = document.createElement("button");
         btnDelete.textContent = "x";
         btnDelete.classList.add("btn-delete");
+        btnDelete.style.marginLeft = "auto";
+        btnDelete.setAttribute("draggable", "false"); 
+        
         btnDelete.onclick = (e) => {
             e.stopPropagation();
-            const fullPath = path ? `${path}/${item.name}` : item.name;
             deleteItem(fullPath, fileTree);
         };
 
-        if (item.type === "folder") {
-            const currentPath = path ? `${path}/${item.name}` : item.name;
-            li.innerHTML = `📁 <strong>${item.name}</strong>`;
-            li.classList.add("folder-item");
-            
-            li.addEventListener("click", (e) => {
-                e.stopPropagation();
-                document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
-                li.classList.add('selected-folder');
-                selectedFolderPath = currentPath;
-            });
-
-            li.draggable = true;
-            li.addEventListener('dragstart', e => { e.dataTransfer.setData("path", currentPath); e.stopPropagation(); });
-            li.addEventListener('dragover', e => { e.preventDefault(); li.style.background = "#eef"; });
-            li.addEventListener('dragleave', () => { li.style.background = "transparent"; });
-            li.addEventListener('drop', e => {
-                e.preventDefault(); 
-                li.style.background = "transparent";
-                const sourcePath = e.dataTransfer.getData("path");
-                moveItem(sourcePath, currentPath, fileTree);
-            });
-            li.appendChild(btnDelete);
-            container.appendChild(li);
-            const ul = document.createElement("ul"); 
-            ul.style.marginLeft="20px"; 
-            li.appendChild(ul);
-            renderTreeRecursive(item, ul, currentPath);
-
-        } else if (item.type === "file") {
-            let icon = getIcon(item.name)
-            li.innerHTML = `${icon} ${item.name}`;
-            li.draggable = true;
-            li.addEventListener('dragstart', e => { 
-                const filePath = path ? `${path}/${item.name}` : item.name;
-                e.dataTransfer.setData("path", filePath); 
-                e.stopPropagation(); 
-            });
-            li.appendChild(btnDelete);
-            container.appendChild(li);
-        }
+        itemRow.appendChild(btnDelete);
+        container.appendChild(li);
     });
 }
 
@@ -221,16 +249,27 @@ async function saveFileTree() {
     }
 }
 
-function getIcon(filename) {
-    const parts = filename.split(".");
-    const extension = parts[parts.length - 1];
-    const ext = extension.toLowerCase();
-
-    if (["json"].includes(ext)) return "📜";
-    if (["typ"].includes(ext)) return "📘";
-    if (["tmtheme"].includes(ext)) return "📔";
-    if (["py", "sh", "js"].includes(ext)) return "📕";
-    if (["jpg", "jpeg", "svg", "png"].includes(ext)) return "🖼️";
+export function getIcon(filename) {
+    const ext = filename.split(".").pop().toLowerCase();
     
-    return "❓";
+    const iconMap = {
+        json: FileJson,
+        typ: Book,
+        tmtheme: Notebook,
+        py: Terminal,
+        js: FileCode,
+        jpg: Image,
+        png: Image
+    };
+
+    const IconData = iconMap[ext] || FileQuestion;
+
+    const svgElement = createElement(IconData);
+    
+    svgElement.setAttribute('width', '18');
+    svgElement.setAttribute('height', '18');
+    svgElement.setAttribute('class', 'inline-block mr-2');
+    svgElement.style.verticalAlign = "middle";
+
+    return svgElement.outerHTML; 
 }

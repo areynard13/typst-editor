@@ -98,7 +98,9 @@ input[type="email"]:focus {
     color: rgb(218, 45, 45);
     cursor: pointer;
 }
-
+.close-btn {
+    cursor: pointer;
+}
 .user-icon {
     margin-right: 10px;
     font-size: 1.1rem;

@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import '../assets/style/style.css';
 import * as monaco from "monaco-editor";
+import { ArrowDownToLine, Bold, FolderOpen, Folders, Italic, Underline, ZoomIn, ZoomOut } from "lucide-react";
 
 export default function Editor({ projectId, title, content, fileTree }) {
   const editorRef = useRef(null);
@@ -106,30 +107,22 @@ export default function Editor({ projectId, title, content, fileTree }) {
           <nav>
             <div className="btnNavBarCategory">
               <button className="btnNavBar" id="btnSave">
-                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#000" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 3V16M12 16L16 11.625M12 16L8 11.625" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M15 21H9C6.17157 21 4.75736 21 3.87868 20.1213C3 19.2426 3 17.8284 3 15M21 15C21 17.8284 21 19.2426 20.1213 20.1213C19.8215 20.4211 19.4594 20.6186 19 20.7487" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <ArrowDownToLine />
               </button>
               <button className="btnNavBar" id="btnOpen">
-                <svg className="iconOpen" width="20px" height="20px" fill="#000" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                  <g fillRule="evenodd" transform="translate(42.667 42.667)">
-                    <path d="M178.0832,42.6666667 L221.594,77.0716667 L191.217,107.448667 L163.24992,85.3333333 L42.6666667,85.3333333 L42.6666667,296.106667 L82.0209067,170.666667 L341.333333,170.666667 L341.333,170.665667 L384,170.665667 L437.333333,170.666667 L372.583253,384 L0,384 L0,42.6666667 L178.0832,42.6666667 Z M379.79136,213.333333 L113.354027,213.333333 L73.1874133,341.333333 L340.95808,341.333333 L379.79136,213.333333 Z" />
-                    <path d="M384,0 L384,149.333333 L341.333333,149.333333 L341.332777,72.836 L264.836777,149.332777 L204.496777,149.333333 L311.162777,42.666 L234.666667,42.6666667 L234.666667,0 L384,0 Z" />
-                  </g>
-                </svg>
+                <FolderOpen />
               </button>
               <input type="file" id="fileInput" accept=".typ,.txt" style={{ display: "none" }} />
             </div>
 
             <div className="btnNavBarCategory">
-              <button id="btnBold" className="btnNavBar"><strong>B</strong></button>
-              <button id="btnItalic" className="btnNavBar"><i>I</i></button>
-              <button id="btnUnderline" className="btnNavBar"><u>U</u></button>
+              <button id="btnBold" className="btnNavBar"><Bold /></button>
+              <button id="btnItalic" className="btnNavBar"><Italic /></button>
+              <button id="btnUnderline" className="btnNavBar"><Underline /></button>
             </div>
 
             <div className="btnNavBarCategory">
-              <button className="btnNavBar" id="btnShowImages">📁</button>
+              <button className="btnNavBar" id="btnShowImages"><Folders /></button>
             </div>
           </nav>
 
@@ -168,20 +161,11 @@ export default function Editor({ projectId, title, content, fileTree }) {
           <div>
             <div className="pageBtnContainer">
               <button className="btnZoom" id="btnZoomOut">
-                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M20.9992 21L14.9492 14.95" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M6 10H14" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <ZoomOut />
               </button>
               <span id="zoomLevel">100%</span>
               <button className="btnZoom" id="btnZoomIn">
-                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M20.9992 21L14.9492 14.95" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M6 10H14" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M10 6V14" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <ZoomIn />
               </button>
               <button className="btnExport" id="btnExportPdf">Export to PDF</button>
               <button className="btnExport" id="btnExportSvg">Export to SVG</button>

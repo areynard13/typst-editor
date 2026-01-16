@@ -2,7 +2,7 @@
 import { useState, useTransition } from "react"
 import "../assets/style/sharedUserWindow.css"
 import { shareProject, removeSharedUser } from "@/app/dashboard/actions"
-import { Trash } from "lucide-react"
+import { Trash, Plus, User, X } from "lucide-react"
 
 export default function SharedUserWindow({ projectId, title, users, onClose, onRemoveSuccess }) {
     const [email, setEmail] = useState('')
@@ -42,7 +42,7 @@ export default function SharedUserWindow({ projectId, title, users, onClose, onR
             <div className="window-container" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center mb-4">
                     <h2>Project <strong>{title}</strong> - Sharing</h2>
-                    <button onClick={onClose} className="close-btn">×</button>
+                    <button onClick={onClose} className="close-btn"><X /></button>
                 </div>
                 
                 <p className="description">Please write here the email of the user you want to share</p>
@@ -60,7 +60,7 @@ export default function SharedUserWindow({ projectId, title, users, onClose, onR
                         onClick={handleShare}
                         disabled={isPending || !email}
                     >
-                        {isPending ? "Processing..." : "Share"}
+                        {isPending ? "Processing..." : <Plus />}
                     </button>
                 </div>
 
@@ -74,8 +74,8 @@ export default function SharedUserWindow({ projectId, title, users, onClose, onR
                         <ul className="user-list">
                             {users.map((u, index) => (
                                 <li key={index} className="user-item">
-                                    <div>
-                                        <span className="user-icon">👤</span>
+                                    <div className="flex">
+                                        <span className="user-icon"><User /></span>
                                         {u.email}
                                     </div>
                                     <button 

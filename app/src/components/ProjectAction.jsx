@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { deleteProject, getUsersEmailFromId } from "../app/dashboard/actions"
 import SharedUserWindows from "./SharedUserWindow"
-import { Link as LinkIcon } from "lucide-react" 
+import { Ellipsis, Link as LinkIcon, Share2, Trash } from "lucide-react" 
 
 export function ProjectActions({ projectId, title, usersSharing, isAuthor }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -68,7 +68,7 @@ export function ProjectActions({ projectId, title, usersSharing, isAuthor }) {
             }}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors font-bold text-gray-500"
           >
-            •••
+            <Ellipsis />
         <div className="relative" ref={menuRef}></div>
           </button>
 
@@ -77,18 +77,18 @@ export function ProjectActions({ projectId, title, usersSharing, isAuthor }) {
               <button
                 type="button"
                 onClick={handleShare}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors flex items-center gap-2"
               >
-                Share
+                <Share2 size={20} /> Share
               </button>
 
               <form action={deleteProject}>
                 <input type="hidden" name="id" value={projectId} />
                 <button
                   type="submit"
-                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
                 >
-                  Delete
+                  <Trash size={20} /> Delete
                 </button>
               </form>
             </div>

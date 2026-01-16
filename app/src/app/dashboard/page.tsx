@@ -1,6 +1,7 @@
 import { getUserProjects, createProject } from "./actions"
 import { ProjectList } from "../../components/ProjectList"
 import Footer from "../../components/Footer"
+import { Plus } from "lucide-react"
 
 export default async function Dashboard() {
   const projects = await getUserProjects()
@@ -27,7 +28,7 @@ export default async function Dashboard() {
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm"
               >
-                +
+                <Plus />
               </button>
             </form>
           </div>
