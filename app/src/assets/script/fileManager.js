@@ -141,7 +141,7 @@ function updatePaths(item, newFolderPath) {
     }
 }
 
-export function initFileManager(btnShowImages, btnCloseImages, btnCreateFolder, btnUploadImages, imageFilesInput, rootDropZone) {
+export function initFileManager(btnShowImages, btnCloseImages, btnCreateFolder, btnUploadImages, imageFilesInput, rootDropZone, customPrompt) {
     btnShowImages.addEventListener("click", () => {
         imageExplorer.style.display = "block"
     });
@@ -152,20 +152,26 @@ export function initFileManager(btnShowImages, btnCloseImages, btnCreateFolder, 
         document.querySelectorAll('.folder-item').forEach(el => el.classList.remove('selected-folder'));
         selectedFolderPath = "root";
     });
-    btnCreateFolder.addEventListener("click", async () => {
-        const folderName = prompt(`Create new folder in ${selectedFolderPath}:`);
+btnCreateFolder.addEventListener("click", () => {
+    customPrompt(`Create new folder in ${selectedFolderPath}`, async (folderName) => {
+        
         if (!folderName) return;
 
         const targetFolder = getFolder(fileTree, selectedFolderPath);
         if (targetFolder) {
             if (!targetFolder.children[folderName]) {
-                targetFolder.children[folderName] = { type: "folder", name: folderName, children: {} };
+                targetFolder.children[folderName] = { 
+                    type: "folder", 
+                    name: folderName, 
+                    children: {} 
+                };
                 renderFileExplorer(fileTree);
                 await saveFileTree();
-                selectedFolderPath="root"
+                selectedFolderPath = "root";
             }
         }
     });
+});
     btnUploadImages.addEventListener("click", (e) => {
         e.preventDefault();
         imageFilesInput.click();

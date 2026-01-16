@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import '../assets/style/style.css';
 import * as monaco from "monaco-editor";
 import { ArrowDownToLine, Bold, FolderOpen, Folders, Italic, Underline, ZoomIn, ZoomOut } from "lucide-react";
@@ -7,6 +7,9 @@ import { ArrowDownToLine, Bold, FolderOpen, Folders, Italic, Underline, ZoomIn, 
 export default function Editor({ projectId, title, content, fileTree }) {
   const editorRef = useRef(null);
   const monacoInstance = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({ title: "", callback: null });
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -64,7 +67,8 @@ export default function Editor({ projectId, title, content, fileTree }) {
           document.getElementById("btnCreateFolder"),
           document.getElementById("btnUploadImages"),
           document.getElementById("imageFilesInput"),
-          document.getElementById("rootDropZone")
+          document.getElementById("rootDropZone"),
+          openCustomPrompt
         );
 
         EditorScript.fetchCompile();
@@ -82,7 +86,20 @@ export default function Editor({ projectId, title, content, fileTree }) {
         monacoInstance.current = null;
       }
     };
-  }, [projectId]);;
+  }, [projectId]);
+
+  const openCustomPrompt = (title, callback) => {
+    setModalConfig({ title, callback });
+    setInputValue("");
+    setIsModalOpen(true);
+  };
+
+  const handleModalConfirm = () => {
+    if (inputValue.trim() && modalConfig.callback) {
+      modalConfig.callback(inputValue);
+    }
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="container-full">
@@ -174,6 +191,34 @@ export default function Editor({ projectId, title, content, fileTree }) {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-xl shadow-xl w-80 border border-slate-200">
+            <h3 className="text-lg font-bold mb-4 text-slate-800">{modalConfig.title}</h3>
+            <input 
+              autoFocus
+              className="w-full p-2 border border-slate-300 rounded-md mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleModalConfirm()}
+            />
+            <div className="flex gap-2 justify-end">
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-md"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleModalConfirm}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
