@@ -1,6 +1,6 @@
 'use server'
 
-import { auth } from "@/lib/auth"
+import { auth, signOut } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
@@ -299,4 +299,8 @@ export async function getUsersEmailFromId(usersId: number[]) {
     });
 
     return users;
+}
+
+export async function handleSignOut() {
+    await signOut()
 }

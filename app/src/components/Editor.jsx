@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import '../assets/style/style.css';
 import * as monaco from "monaco-editor";
 import { ArrowDownToLine, Bold, FolderOpen, Folders, Italic, Underline, ZoomIn, ZoomOut } from "lucide-react";
+import { SignOutButton } from "./SignOutButton";
 
 export default function Editor({ projectId, title, content, fileTree }) {
   const editorRef = useRef(null);
@@ -117,6 +118,7 @@ export default function Editor({ projectId, title, content, fileTree }) {
         </div>
 
         <div className="header-right">
+          <SignOutButton />
         </div>
       </header>
       <div className="container-app">
