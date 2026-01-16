@@ -42,6 +42,10 @@ export function ProjectActions({ projectId, title, usersSharing, isAuthor }) {
     setIsOpen(false)
   }
 
+  const handleRemoveUserSuccess = (emailToRemove) => {
+    setEmails((prev) => prev.filter((user) => user.email !== emailToRemove));
+  };
+
   return (
     <>
       {isAuthor && isSharing && (
@@ -50,6 +54,7 @@ export function ProjectActions({ projectId, title, usersSharing, isAuthor }) {
           title={title}
           users={emails}
           onClose={() => setIsSharing(false)}
+          onRemoveSuccess={handleRemoveUserSuccess}
         />
       )}
 

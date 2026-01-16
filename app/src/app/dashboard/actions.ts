@@ -144,6 +144,46 @@ export async function shareProject(projectId: number, sharedUserEmail: string) {
     return updatedUser;
 }
 
+export async function removeSharedUser(projectId: number, sharedUserEmail: string) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    const [project, userToRemove] = await Promise.all([
+        prisma.project.findUnique({
+            where: { id: projectId },
+            select: { userId: true, sharedUsers: true }
+        }),
+        prisma.user.findUnique({
+            where: { email: sharedUserEmail },
+            select: { id: true, sharedProjects: true }
+        })
+    ]);
+
+    if (!project) throw new Error("Project not found");
+    if (!userToRemove) throw new Error("User not found");
+
+    if (project.userId !== Number(session.user.id)) {
+        throw new Error("Only the owner can remove collaborators");
+    }
+
+    const newSharedUsers = project.sharedUsers.filter(id => id !== userToRemove.id);
+    const newSharedProjects = userToRemove.sharedProjects.filter(id => id !== projectId);
+
+    await prisma.$transaction([
+        prisma.project.update({
+            where: { id: projectId },
+            data: { sharedUsers: newSharedUsers }
+        }),
+        prisma.user.update({
+            where: { id: userToRemove.id },
+            data: { sharedProjects: newSharedProjects }
+        })
+    ]);
+
+    revalidatePath("/dashboard");
+    return { success: true };
+}
+
 export async function getUsersEmailFromId(usersId: number[]) {
     const users = await prisma.user.findMany({
         where: {

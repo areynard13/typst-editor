@@ -85,12 +85,18 @@ input[type="email"]:focus {
 .user-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 10px;
     background-color: #f8f9fa;
     border-radius: 6px;
     margin-bottom: 8px;
     font-size: 0.9rem;
     border: 1px solid #eee;
+}
+
+.delete {
+    color: rgb(218, 45, 45);
+    cursor: pointer;
 }
 
 .user-icon {

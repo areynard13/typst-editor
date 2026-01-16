@@ -1,13 +1,13 @@
 "use client"
 import { useState, useTransition } from "react"
 import "../assets/style/sharedUserWindow.css"
-import { shareProject } from "@/app/dashboard/actions"
+import { shareProject, removeSharedUser } from "@/app/dashboard/actions"
+import { Trash } from "lucide-react"
 
-export default function SharedUserWindow({ projectId, title, users, onClose }) {
+export default function SharedUserWindow({ projectId, title, users, onClose, onRemoveSuccess }) {
     const [email, setEmail] = useState('')
     const [isPending, startTransition] = useTransition()
     const [error, setError] = useState('')
-
 
     const handleShare = async () => {
         if (!email) return;
@@ -17,6 +17,20 @@ export default function SharedUserWindow({ projectId, title, users, onClose }) {
             try {
                 await shareProject(projectId, email);
                 setEmail('');
+            } catch (err) {
+                setError(err.message);
+            }
+        });
+    }
+
+    const handleRemove = async (targetEmail) => {
+        setError('');
+        startTransition(async () => {
+            try {
+                const result = await removeSharedUser(projectId, targetEmail);
+                if (result.success) {
+                    onRemoveSuccess(targetEmail);
+                }
             } catch (err) {
                 setError(err.message);
             }
@@ -46,27 +60,35 @@ export default function SharedUserWindow({ projectId, title, users, onClose }) {
                         onClick={handleShare}
                         disabled={isPending || !email}
                     >
-                        {isPending ? "Sharing..." : "Share"}
+                        {isPending ? "Processing..." : "Share"}
                     </button>
                 </div>
 
-                {error && <p className="error-text" style={{color: 'red', fontSize: '0.8rem'}}>{error}</p>}
+                {error && <p className="error-text" style={{color: 'red', fontSize: '0.8rem', marginTop: '10px'}}>{error}</p>}
 
                 <div className="user-shared-container">
                     <h3>Shared with:</h3>
                     {users.length === 0 ? (
                         <p className="empty-msg">No person shared yet.</p>
                     ) : (
-                        <>
-                            <ul className="user-list">
-                                {users.map((u, index) => (
-                                    <li key={index} className="user-item">
+                        <ul className="user-list">
+                            {users.map((u, index) => (
+                                <li key={index} className="user-item">
+                                    <div>
                                         <span className="user-icon">👤</span>
                                         {u.email}
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
+                                    </div>
+                                    <button 
+                                        className="delete"
+                                        onClick={() => handleRemove(u.email)}
+                                        disabled={isPending}
+                                        title="Remove user"
+                                    >
+                                        <Trash size={16} />
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     )}
                 </div>
             </div>
